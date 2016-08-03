@@ -105,12 +105,16 @@ int main(int argc, const char* argv[], const char* envp[])
 		ds.Reset(img1.Width(),img1.Height());
 		Set(&cnvout,0);
 
-		for(int d=0;d<maxdisparity;d++){
+		for(int d=0;d<maxdisparity;d++)
+		{
 			a[d].Reset(img1.Width(),img1.Height());
 			Set(&a[d],0);
-			for(int y=0;y<img1.Height()-1;y++){
-				for(int x=0;x<img1.Width()-1;x++){
-					if((x-d)>=0){
+			for(int y=0;y<img1.Height()-1;y++)
+			{
+				for(int x=0;x<img1.Width()-1;x++)
+				{
+					if((x-d)>=0)
+					{
 						a[d](x,y)=abs(img1(x,y)-img2(x-d,y));
 					}
 				}
@@ -123,7 +127,8 @@ int main(int argc, const char* argv[], const char* envp[])
 
 		int ar[7]={1,1,1,1,1,1,1};
 
-		for(int d=0;d<maxdisparity;d++){								//computing disparity map
+		for(int d=0;d<maxdisparity;d++)
+		{								//computing disparity map
 			for(y=0;y<img1.Height();y++){
 				for(x=3;x<(img1.Width()-3);x++){
 					val=0;
@@ -133,10 +138,13 @@ int main(int argc, const char* argv[], const char* envp[])
 					tmp(x,y)=val;					
 				}
 			}
-			for(y=3;y<(img1.Height()-3);y++){
-				for(x=0;x<img1.Width();x++){
+			for(y=3;y<(img1.Height()-3);y++)
+			{
+				for(x=0;x<img1.Width();x++)
+				{
 					val=0;
-					for(i=0;i<7;i++){
+					for(i=0;i<7;i++)
+					{
 						val=val+ar[i]*tmp(x,y+3-i);
 					}
 				    a[d](x,y)=val;
@@ -144,11 +152,15 @@ int main(int argc, const char* argv[], const char* envp[])
 			}			
 		} 	
 		
-		for(y=0;y<img1.Height();y++){
-				for(x=0;x<img1.Width();x++){
+		for(y=0;y<img1.Height();y++)
+		{
+				for(x=0;x<img1.Width();x++)
+				{
 					int gc=999999;
-					for(int d=0;d<maxdisparity;d++){
-						if(a[d](x,y)<gc){
+					for(int d=0;d<maxdisparity;d++)
+					{
+						if(a[d](x,y)<gc)
+						{
 							gc=a[d](x,y);
 							dmap(x,y)=d;
 						}
@@ -159,10 +171,13 @@ int main(int argc, const char* argv[], const char* envp[])
 		fig5.Draw(dmap);
 
 		for(y=0;y<img1.Height();y++){							
-				for(x=0;x<img1.Width();x++){
+				for(x=0;x<img1.Width();x++)
+				{
 					int gc=999999;
-					for(int d=0;d<maxdisparity;d++){
-						if(a[d](x,y)<gc){
+					for(int d=0;d<maxdisparity;d++)
+					{
+						if(a[d](x,y)<gc)
+						{
 							gc=a[d](x,y);
 							dmaplr(x,y)=d;
 						}
@@ -170,12 +185,17 @@ int main(int argc, const char* argv[], const char* envp[])
 				}
 		}
 
-		for(y=0;y<img1.Height();y++){
-			for(x=0;x<img1.Width();x++){
+		for(y=0;y<img1.Height();y++)
+		{
+			for(x=0;x<img1.Width();x++)
+			{
 				int gc=999999;
-				for(int d=0;d<maxdisparity;d++){
-					if((x-dmaplr(x,y)+d)>0 && (x-dmaplr(x,y)+d)<img1.Width()){
-						if(a[d](x-dmaplr(x,y)+d,y)<gc){
+				for(int d=0;d<maxdisparity;d++)
+				{
+					if((x-dmaplr(x,y)+d)>0 && (x-dmaplr(x,y)+d)<img1.Width())
+					{
+						if(a[d](x-dmaplr(x,y)+d,y)<gc)
+						{
 							gc=a[d](x-dmaplr(x,y)+d,y);
 							dmaplr1(x,y)=d;
 						}							
@@ -184,12 +204,16 @@ int main(int argc, const char* argv[], const char* envp[])
 			}
 		}
 
-		for(y=0;y<img1.Height();y++){
-			for(x=0;x<img1.Width();x++){
-				if(dmaplr(x,y)==dmaplr1(x,y)){
+		for(y=0;y<img1.Height();y++)
+		{
+			for(x=0;x<img1.Width();x++)
+			{
+				if(dmaplr(x,y)==dmaplr1(x,y))
+				{
 					dmaplrf(x,y)=dmaplr(x,y);
 				}
-				else{
+				else
+				{
 					dmaplrf(x,y)=0;
 				}
 			}
@@ -198,9 +222,12 @@ int main(int argc, const char* argv[], const char* envp[])
 		Figure fig6("Disparity map with left right consistency check");					//Displaying disparity map with left right consistency check
 		fig6.Draw(dmaplrf);
 
-		for(y=0;y<img1.Height();y++){
-			for(x=0;x<img1.Width();x++){
-				if(dmaplrf(x,y)!=0){
+		for(y=0;y<img1.Height();y++)
+		{
+			for(x=0;x<img1.Width();x++)
+			{
+				if(dmaplrf(x,y)!=0)
+				{
 					depth(x,y)=k/dmaplrf(x,y);
 				}
 			}
@@ -211,9 +238,12 @@ int main(int argc, const char* argv[], const char* envp[])
 
 		int vertices=0;
 
-		for(y=0;y<img1.Height();y++){
-			for(x=0;x<img1.Width();x++){
-				if(dmaplrf(x,y)!=0){
+		for(y=0;y<img1.Height();y++)
+		{
+			for(x=0;x<img1.Width();x++)
+			{
+				if(dmaplrf(x,y)!=0)
+				{
 					vertices++;
 				}
 			}
@@ -225,9 +255,12 @@ int main(int argc, const char* argv[], const char* envp[])
 		myply.open("myply.ply");
 		myply<<"ply"<<endl<<"format ascii 1.0"<<endl<<"element vertex "<<vertices<<endl<<"property float x"<<endl<<"property float y"<<endl<<"property float z"<<endl<<"property uchar diffuse_red"<<endl<<"property uchar diffuse_green"<<endl<<"property uchar diffuse_blue"<<endl<<"end_header"<<endl;
 
-		for(y=0;y<img1.Height();y++){
-			for(x=0;x<img1.Width();x++){
-				if(depth(x,y)>0){
+		for(y=0;y<img1.Height();y++)
+		{
+			for(x=0;x<img1.Width();x++)
+			{
+				if(depth(x,y)>0)
+				{
 					myply<<x<<" "<<-y<<" "<<-depth(x,y)<<" "<<(int)img1b(x,y).r<<" "<<(int)img1b(x,y).g<<" "<<(int)img1b(x,y).b<<endl;
 				}
 			}
